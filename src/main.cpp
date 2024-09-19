@@ -78,7 +78,7 @@ void loop() {
         }
         moter_switch = !moter_switch;
     }
-    
+
     if(!moter_switch) {
         if(abs(right_moter) > 30){
             ledcWrite(3, abs(right_moter));
@@ -87,7 +87,6 @@ void loop() {
         else{
             ledcWrite(3, 0);
         }
-        
         if(abs(left_moter) > 30){
             ledcWrite(4, abs(left_moter));
             digitalWrite(LEFT_DIR_PIN, left_moter > 0 ? LOW:HIGH);
