@@ -13,6 +13,9 @@ const int RIGHT_PWM_PIN = 26;
 //左のモーター
 const int LEFT_DIR_PIN = 22;
 const int LEFT_PWM_PIN = 27;
+
+bool moter_switch = false;
+
 //サーボの初めの角度(degree)
 int servo_deg_right = 135;
 int servo_deg_left = 45;
@@ -68,21 +71,37 @@ void loop() {
         delay(100);
     }
 
-    if(abs(right_moter) > 30){
-        ledcWrite(3, abs(right_moter));
-        digitalWrite(RIGHT_DIR_PIN, right_moter > 0 ? HIGH:LOW);
-    }
-    else{
-        ledcWrite(3, 0);
+    if(PS4.Square()){
+        if(moter_switch){
+            ledcWrite(3, 0);
+            ledcWrite(4, 0);
+        }
+        moter_switch = !moter_switch;
     }
     
-    if(abs(left_moter) > 30){
-        ledcWrite(4, abs(left_moter));
-        digitalWrite(LEFT_DIR_PIN, left_moter > 0 ? LOW:HIGH);
+    if(!moter_switch) {
+        if(abs(right_moter) > 30){
+            ledcWrite(3, abs(right_moter));
+            digitalWrite(RIGHT_DIR_PIN, right_moter > 0 ? HIGH:LOW);
+        }
+        else{
+            ledcWrite(3, 0);
+        }
+        
+        if(abs(left_moter) > 30){
+            ledcWrite(4, abs(left_moter));
+            digitalWrite(LEFT_DIR_PIN, left_moter > 0 ? LOW:HIGH);
+        }
+        else{
+            ledcWrite(4, 0);
+        }
     }
-    else{
-        ledcWrite(4, 0);
+    else if(moter_switch){
+        ledcWrite(3, 150);
+        digitalWrite(LEFT_DIR_PIN, HIGH);
+        ledcWrite(4, 150);
+        digitalWrite(LEFT_DIR_PIN, LOW);
     }
-    delay(100);
+
 }
 
