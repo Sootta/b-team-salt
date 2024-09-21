@@ -17,8 +17,8 @@ const int LEFT_PWM_PIN = 27;
 bool moter_switch = false;
 
 //サーボの初めの角度(degree)
-int servo_deg_right = 135;
-int servo_deg_left = 45;
+int servo_deg_right = 155;
+int servo_deg_left = 0;
 
 void setup() {
     Serial.begin(MONIROR_SPEED);
@@ -49,14 +49,14 @@ void loop() {
     int right_moter = map(PS4.RStickY(), -128, 128, -100, 100);
     int left_moter = map(PS4.LStickY(), -128, 128, -100, 100);
 
-    if(PS4.Circle() && servo_deg_right < 135){
+    if(PS4.Circle() && servo_deg_right < 155){
         servo_deg_right += 10;
         servo_deg_left -= 10;
         ServoRight.write(servo_deg_right);
         ServoLeft.write(servo_deg_left);
         delay(100);
     }
-    else if(PS4.Cross() && servo_deg_right > 60){
+    else if(PS4.Cross() && servo_deg_right > 80){
         servo_deg_right -= 10;
         servo_deg_left += 10;
         ServoRight.write(servo_deg_right);
@@ -64,8 +64,8 @@ void loop() {
         delay(100);
     }
     else if(PS4.Triangle()){
-        servo_deg_right = 135;
-        servo_deg_left = 45;
+        servo_deg_right = 155;
+        servo_deg_left = 0;
         ServoRight.write(servo_deg_right);
         ServoLeft.write(servo_deg_left);
         delay(100);
@@ -77,6 +77,7 @@ void loop() {
             ledcWrite(4, 0);
         }
         moter_switch = !moter_switch;
+        delay(50);
     }
 
 
